@@ -5,6 +5,8 @@
 
 This repository contains OpenTofu/Terraform modules for provisioning the [Humanitec Agent](https://developer.humanitec.com/platform-orchestrator/docs/integration-and-extensions/humanitec-agent/overview/) on a Kubernetes cluster using Helm.
 
+TODO: link to https://developer.humanitec.com/platform-orchestrator/docs/integration-and-extensions/humanitec-agent/helm-chart-values/ for Helm Chart values
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
