@@ -107,7 +107,7 @@ resource "humanitec_resource_definition" "agent" {
 # Agent registration in the Orchestrator
 resource "humanitec_agent" "agent" {
   id          = local.agent_id
-  description = "Agent ${local.agent_id}"
+  description = local.agent_description
   public_keys = [
     {
       key = local.agent_public_key

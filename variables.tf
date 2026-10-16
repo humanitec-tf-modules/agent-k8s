@@ -44,7 +44,7 @@ variable "agent_description" {
 variable "helm_release_namespace" {
   description = "Kubernetes namespace where to install the Agent"
   type        = string
-  nullable    = true
+  nullable    = false
   default     = "humanitec-agent"
 }
 variable "helm_release_create_namespace" {
@@ -55,7 +55,7 @@ variable "helm_release_create_namespace" {
 variable "helm_release_name" {
   type        = string
   description = "Name of the Helm release for the Agent"
-  nullable    = true
+  nullable    = false
   default     = "humanitec-agent"
 }
 variable "helm_release_version" {
@@ -67,7 +67,7 @@ variable "helm_release_version" {
 variable "helm_release_repository" {
   description = "Repository where to locate the requested chart. If is a URL the chart is installed without installing the repository."
   type        = string
-  nullable    = true
+  nullable    = false
   default     = "oci://ghcr.io/humanitec/charts"
 }
 variable "helm_release_chart" {
