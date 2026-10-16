@@ -217,11 +217,73 @@ run "rejects_empty_agent_id" {
   expect_failures = [var.agent_id]
 }
 
+run "rejects_single_character_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = "a"
+  }
+
+  expect_failures = [var.agent_id]
+}
+
+run "rejects_single_digit_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = "1"
+  }
+
+  expect_failures = [var.agent_id]
+}
+
+run "rejects_single_dash_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = "-"
+  }
+
+  expect_failures = [var.agent_id]
+}
+
+run "rejects_64_character_agent_id" {
+  command = plan
+
+  variables {
+    # 64 characters, otherwise valid: only the length validation must fail
+    agent_id = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+
+  expect_failures = [var.agent_id]
+}
+
+run "rejects_64_character_agent_id_with_dashes" {
+  command = plan
+
+  variables {
+    # 64 characters, otherwise valid: only the length validation must fail
+    agent_id = "my-agent-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+
+  expect_failures = [var.agent_id]
+}
+
 run "rejects_uppercase_agent_id" {
   command = plan
 
   variables {
     agent_id = "My-Agent"
+  }
+
+  expect_failures = [var.agent_id]
+}
+
+run "rejects_leading_dash_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = "-my-agent"
   }
 
   expect_failures = [var.agent_id]
@@ -247,6 +309,16 @@ run "rejects_double_dash_agent_id" {
   expect_failures = [var.agent_id]
 }
 
+run "rejects_only_dashes_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = "--"
+  }
+
+  expect_failures = [var.agent_id]
+}
+
 run "rejects_underscore_agent_id" {
   command = plan
 
@@ -257,11 +329,62 @@ run "rejects_underscore_agent_id" {
   expect_failures = [var.agent_id]
 }
 
-run "rejects_single_character_agent_id" {
+run "rejects_dot_agent_id" {
   command = plan
 
   variables {
-    agent_id = "a"
+    agent_id = "my.agent"
+  }
+
+  expect_failures = [var.agent_id]
+}
+
+run "rejects_whitespace_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = "my agent"
+  }
+
+  expect_failures = [var.agent_id]
+}
+
+run "rejects_surrounding_whitespace_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = " my-agent "
+  }
+
+  expect_failures = [var.agent_id]
+}
+
+run "rejects_trailing_newline_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = "my-agent\n"
+  }
+
+  expect_failures = [var.agent_id]
+}
+
+run "rejects_non_ascii_letter_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = "my-agent-ä"
+  }
+
+  expect_failures = [var.agent_id]
+}
+
+run "rejects_en_dash_agent_id" {
+  command = plan
+
+  variables {
+    # En dash (U+2013) instead of a hyphen
+    agent_id = "my–agent"
   }
 
   expect_failures = [var.agent_id]
@@ -272,5 +395,98 @@ run "accepts_valid_agent_id" {
 
   variables {
     agent_id = "my-agent-01"
+  }
+
+  assert {
+    condition     = humanitec_resource_definition.agent.id == var.agent_id
+    error_message = "Resource Definition ID must be taken from agent_id"
+  }
+}
+
+run "accepts_two_character_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = "ab"
+  }
+
+  assert {
+    condition     = humanitec_resource_definition.agent.id == var.agent_id
+    error_message = "Resource Definition ID must be taken from agent_id"
+  }
+}
+
+run "accepts_two_digit_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = "01"
+  }
+
+  assert {
+    condition     = humanitec_resource_definition.agent.id == var.agent_id
+    error_message = "Resource Definition ID must be taken from agent_id"
+  }
+}
+
+run "accepts_three_character_agent_id_with_dash" {
+  command = plan
+
+  variables {
+    agent_id = "a-b"
+  }
+
+  assert {
+    condition     = humanitec_resource_definition.agent.id == var.agent_id
+    error_message = "Resource Definition ID must be taken from agent_id"
+  }
+}
+
+run "accepts_digits_only_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = "123"
+  }
+
+  assert {
+    condition     = humanitec_resource_definition.agent.id == var.agent_id
+    error_message = "Resource Definition ID must be taken from agent_id"
+  }
+}
+
+run "accepts_63_character_agent_id" {
+  command = plan
+
+  variables {
+    # 63 characters: the maximum length
+    agent_id = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+
+  assert {
+    condition     = humanitec_resource_definition.agent.id == var.agent_id
+    error_message = "Resource Definition ID must be taken from agent_id"
+  }
+}
+
+run "accepts_63_character_agent_id_with_dashes" {
+  command = plan
+
+  variables {
+    # 63 characters: the maximum length
+    agent_id = "my-agent-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  }
+
+  assert {
+    condition     = humanitec_resource_definition.agent.id == var.agent_id
+    error_message = "Resource Definition ID must be taken from agent_id"
+  }
+}
+
+run "accepts_null_agent_id" {
+  command = plan
+
+  variables {
+    agent_id = null
   }
 }

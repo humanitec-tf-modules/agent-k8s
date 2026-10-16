@@ -21,13 +21,18 @@ variable "agent_public_key" {
   default     = null
 }
 variable "agent_id" {
-  description = "ID for this agent. Must be unique in the Humanitec Organization. Will be used as the ID for both the Resource Definition and the Agent registration. If not set, an ID with a random suffix will be generated"
+  description = "ID for this agent. Must be 2–63 chars, only lowercase letters, digits and single hyphens, no leading/trailing hyphen. Will be used as the ID for both the Resource Definition and the Agent registration. If not set, an ID with a random suffix will be generated"
   type        = string
   nullable    = true
   default     = null
+  
   validation {
-    condition     = var.agent_id == null ? true : can(regex("^[a-z0-9](?:-?[a-z0-9]+)+$", var.agent_id))
-    error_message = "agent_id must consist of lowercase letters, digits and single \"-\" characters, must start and end with a letter or digit, and must be at least two characters long. Leave it unset to generate an ID."
+    condition     = var.agent_id == null ? true : length(var.agent_id) >= 2 && length(var.agent_id) <= 63
+    error_message = "agent_id must be between 2 and 63 characters long"
+  }
+  validation {
+    condition     = var.agent_id == null || can(regex("^[a-z0-9](?:-?[a-z0-9]+)+$", var.agent_id))
+    error_message = "agent_id must only contain lowercase letters, digits, and single hyphens, and must not start or end with a hyphen"
   }
 }
 variable "agent_description" {
