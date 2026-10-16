@@ -17,7 +17,6 @@ variable "agent_private_key" {
 variable "agent_public_key" {
   description = "Public key for the Humanitec Agent authentication. Must be a multiline string starting with -----BEGIN PUBLIC KEY----- and having a final line break. Both or neither of `agent_public_key` and `agent_private_key` must be set. If not set, a convenience key pair will be generated using a `tls_private_key` resource and stored in the Terraform state, but this is not recommended for production use."
   type        = string
-  sensitive   = true
   nullable    = true
   default     = null
 }

@@ -1,33 +1,18 @@
-> [!NOTE]
-> 🚧 The content of this repository is currently being curated. Please do not use before the first release has been cut.
-
 # Humanitec Agent on Kubernetes
 
-This repository contains OpenTofu/Terraform modules for provisioning the [Humanitec Agent](https://developer.humanitec.com/platform-orchestrator/docs/integration-and-extensions/humanitec-agent/overview/) on a Kubernetes cluster using Helm.
+This repository contains OpenTofu/Terraform modules for provisioning the [Humanitec Agent](https://developer.humanitec.com/platform-orchestrator/docs/integration-and-extensions/humanitec-agent/overview/) on a Kubernetes cluster.
 
-TODO: link to https://developer.humanitec.com/platform-orchestrator/docs/integration-and-extensions/humanitec-agent/helm-chart-values/ for Helm Chart values
+The module uses a [Helm chart](https://helm.sh) and requires a [`hashicorp/helm` provider](https://registry.terraform.io/providers/hashicorp/helm) configured to access the target cluster. The module exposes all the properties of the [`helm_release` resource](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) as variables named `helm_release_*`.
 
-Minimal usage example: generate Agent ID and key pair
+The Helm chart itself exposes its own [chart values](https://developer.humanitec.com/platform-orchestrator/docs/integration-and-extensions/humanitec-agent/helm-chart-values/) that you can set via the `helm_release_values` or `helm_release_set*` variables of the module. See the [usage example](#set-helm-chart-values) below.
 
-```hcl
-module "agent_aks" {
-  source = "github.com/humanitec-tf-modules/agent-k8s?ref=vX.Y.Z"
-  providers = {
-    humanitec = humanitec
-    helm      = helm
-  }
+## Usage
 
-  humanitec_org_id     = "my-org"
-  helm_release_version = "1.2.3"
-}
-```
-
-Usage example with Helm Chart value:
+### Common usage: Bring a key pair, define the Agent ID, pin the Helm chart version, use the public chart repository
 
 ```hcl
-module "agent_aks" {
+module "my_agent" {
   source = "github.com/humanitec-tf-modules/agent-k8s?ref=vX.Y.Z"
-
   providers = {
     humanitec = humanitec
     helm      = helm
@@ -36,9 +21,48 @@ module "agent_aks" {
   humanitec_org_id     = "my-org"
   agent_id             = "my-agent"
   agent_private_key    = "-----BEGIN PRIVATE KEY----- ..."
-  agent_public_key     = "-----BEGIN PRIVATE KEY----- ..."
+  agent_public_key     = "-----BEGIN PUBLIC KEY----- ..."
   helm_release_version = "1.2.3"
-  # Setting Helm Chart values
+}
+
+# Match the Agent Resource Definition to your Application / Environment topology
+resource "humanitec_resource_definition_criteria" "agent_my_env_type" {
+  resource_definition_id = module.my_agent.resource_definition_id
+  env_type               = "development"
+  # Use this exact value for res_id
+  res_id                 = "agent"
+}
+```
+
+### Minimal example: Generate a convenience key pair and Agent ID, use the latest Helm chart version, use the public chart repository
+
+Letting the module generate a key pair is a convenience feature and not recommended for production use. Use an external key management solution and pass in the keys instead.
+
+```hcl
+module "my_agent" {
+  source = "github.com/humanitec-tf-modules/agent-k8s?ref=vX.Y.Z"
+  providers = {
+    humanitec = humanitec
+    helm      = helm
+  }
+
+  humanitec_org_id = "my-org"
+}
+```
+
+### Set Helm Chart values
+
+```hcl
+module "my_agent" {
+  source = "github.com/humanitec-tf-modules/agent-k8s?ref=vX.Y.Z"
+  providers = {
+    humanitec = humanitec
+    helm      = helm
+  }
+
+  humanitec_org_id = "my-org"
+
+  # Set Helm chart values via helm_release_values (best readability)
   helm_release_values = [
     yamlencode({
       replicas = 2
@@ -50,6 +74,40 @@ module "agent_aks" {
       }
     })
   ]
+  # Equivalent values via helm_release_set
+  # helm_release_set = [
+  #   {
+  #     name  = "replicas"
+  #     value = 2
+  #   },
+  #   {
+  #     name  = "resources.limits.cpu"
+  #     value = "300m"
+  #   },
+  #   {
+  #     name  = "resources.limits.memory"
+  #     value = "312Mi"
+  #   }
+  # ]
+}
+```
+
+### Self-hosting the Helm chart
+
+```hcl
+module "my_agent" {
+  source = "github.com/humanitec-tf-modules/agent-k8s?ref=vX.Y.Z"
+  providers = {
+    humanitec = humanitec
+    helm      = helm
+  }
+
+  humanitec_org_id                = "my-org"
+  helm_release_repository         = "oci://my-registry.example.com/my/helm/charts"
+  helm_release_chart              = "humanitec-agent"
+  helm_release_version            = "1.2.3"
+  helm_release_repository_ca_file = "..."
+  # Use other "helm_release_repository_*" variables as required to access your own registry
 }
 ```
 
