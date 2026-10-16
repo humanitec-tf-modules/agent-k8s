@@ -101,12 +101,12 @@ variable "helm_release_description" {
   default     = null
 }
 variable "helm_release_devel" {
-  description = "Use chart development versions, too. Equivalent to version '>0.0.0-0'. If `version` is set, this is ignored"
+  description = "Use chart development versions, too. Equivalent to version '>0.0.0-0'. If `helm_release_version` is set, this is ignored"
   type        = bool
   default     = null
 }
 variable "helm_release_disable_crd_hooks" {
-  description = "Prevent CRD hooks from, running, but run other hooks.  See helm install --no-crd-hook"
+  description = "Prevent CRD hooks from running, but run other hooks. See helm install --no-crd-hook"
   type        = bool
   default     = null
 }
@@ -116,7 +116,7 @@ variable "helm_release_disable_openapi_validation" {
   default     = null
 }
 variable "helm_release_disable_webhooks" {
-  description = "Prevent hooks from running.Defaults to `false`."
+  description = "Prevent hooks from running. Defaults to `false`."
   type        = bool
   default     = null
 }
@@ -126,7 +126,7 @@ variable "helm_release_force_update" {
   default     = null
 }
 variable "helm_release_keyring" {
-  description = "Location of public keys used for verification. Used only if `verify` is true. Defaults to `/.gnupg/pubring.gpg` in the location set by `home`."
+  description = "Location of public keys used for verification. Used only if `helm_release_verify` is true. Defaults to `/.gnupg/pubring.gpg` in the location set by `home`."
   type        = string
   default     = null
 }
@@ -169,7 +169,7 @@ variable "helm_release_replace" {
   default     = null
 }
 variable "helm_release_repository_ca_file" {
-  description = "The Repositories CA File"
+  description = "The repositories CA File"
   type        = string
   default     = null
 }
@@ -200,7 +200,7 @@ variable "helm_release_reset_values" {
   default     = null
 }
 variable "helm_release_reuse_values" {
-  description = "When upgrading, reuse the last release's values and merge in any overrides. If 'reset_values' is specified, this is ignored. Defaults to `false`."
+  description = "When upgrading, reuse the last release's values and merge in any overrides. If 'helm_release_reset_values' is specified, this is ignored. Defaults to `false`."
   type        = bool
   default     = null
 }
@@ -219,7 +219,7 @@ variable "helm_release_set" {
   }
 }
 variable "helm_release_set_wo" {
-  description = "Custom values to be merged with the values. This is the same as \"set\" but write-only."
+  description = "Custom values to be merged with the values. This is the same as \"helm_release_set\" but write-only."
   type = list(object({
     name  = string
     value = string
@@ -233,7 +233,7 @@ variable "helm_release_set_wo" {
   }
 }
 variable "helm_release_set_wo_revision" {
-  description = "The current revision of the write-only \"set_wo\" attribute. Incrementing this integer value will cause Terraform to update the write-only value."
+  description = "The current revision of the write-only \"helm_release_set_wo\" attribute. Incrementing this integer value will cause Terraform to update the write-only value."
   type        = number
   default     = null
 }
@@ -274,7 +274,7 @@ variable "helm_release_take_ownership" {
   default     = null
 }
 variable "helm_release_timeout" {
-  description = "Time in seconds to wait for any individual kubernetes operation. Defaults to 300 seconds."
+  description = "Time in seconds to wait for any individual Kubernetes operation. Defaults to 300 seconds."
   type        = number
   default     = null
 }
@@ -284,12 +284,12 @@ variable "helm_release_upgrade_install" {
   default     = null
 }
 variable "helm_release_values" {
-  description = "List of values in raw yaml format to pass to helm."
+  description = "List of values in raw yaml format to pass to Helm."
   type        = list(string)
   default     = null
 }
 variable "helm_release_verify" {
-  description = "Verify the package before installing it.Defaults to `false`."
+  description = "Verify the package before installing it. Defaults to `false`."
   type        = bool
   default     = null
 }
