@@ -3,8 +3,7 @@ locals {
   module_managed_values = ["humanitec.org", "humanitec.privateKey"]
 
   agent_private_key = coalesce(one(tls_private_key.agent[*].private_key_pem_pkcs8), var.agent_private_key)
-  # A public key is not secret, so it is exposed without the sensitive marking of the variable
-  agent_public_key = coalesce(one(tls_private_key.agent[*].public_key_pem), nonsensitive(var.agent_public_key))
+  agent_public_key  = coalesce(one(tls_private_key.agent[*].public_key_pem), var.agent_public_key)
 
   agent_id          = coalesce(var.agent_id, one([for s in random_string.agent_id_suffix : "humanitec-agent-${s.result}"]))
   agent_description = coalesce(var.agent_description, local.agent_id)
