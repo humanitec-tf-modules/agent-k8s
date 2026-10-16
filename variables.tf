@@ -58,6 +58,7 @@ variable "helm_release_version" {
   type        = string
   description = "Chart version to use for the Agent installation in the format `X.Y.Z`. If this is not specified, the latest version is installed."
   nullable    = true
+  default     = null
 }
 variable "helm_release_repository" {
   description = "Repository where to locate the requested chart. If is a URL the chart is installed without installing the repository."
