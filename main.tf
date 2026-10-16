@@ -88,6 +88,12 @@ resource "helm_release" "humanitec_agent" {
   ], coalesce(var.helm_release_set_sensitive, []))
   set_wo          = var.helm_release_set_wo
   set_wo_revision = var.helm_release_set_wo_revision
+
+  # Terraform can install the chart before the public key is registered.
+  # With wait on by default, a slow registration could lead to a crash-looping or unready Agent pod during apply.
+  # On destroy, the registration can also be removed while the pod is still running.
+  # This dependency remediates these issues.
+  depends_on = [humanitec_agent.agent]
 }
 
 # Orchestrator Resource Definition for the Agent
