@@ -7,6 +7,52 @@ This repository contains OpenTofu/Terraform modules for provisioning the [Humani
 
 TODO: link to https://developer.humanitec.com/platform-orchestrator/docs/integration-and-extensions/humanitec-agent/helm-chart-values/ for Helm Chart values
 
+Minimal usage example: generate Agent ID and key pair
+
+```hcl
+module "agent_aks" {
+  source = "github.com/humanitec-tf-modules/agent-k8s?ref=vX.Y.Z"
+  providers = {
+    humanitec = humanitec
+    helm      = helm
+  }
+
+  humanitec_org_id     = "my-org"
+  helm_release_version = "1.2.3"
+}
+```
+
+Usage example with Helm Chart value:
+
+```hcl
+module "agent_aks" {
+  source = "github.com/humanitec-tf-modules/agent-k8s?ref=vX.Y.Z"
+
+  providers = {
+    humanitec = humanitec
+    helm      = helm
+  }
+
+  humanitec_org_id     = "my-org"
+  agent_id             = "my-agent"
+  agent_private_key    = "-----BEGIN PRIVATE KEY----- ..."
+  agent_public_key     = "-----BEGIN PRIVATE KEY----- ..."
+  helm_release_version = "1.2.3"
+  # Setting Helm Chart values
+  helm_release_values = [
+    yamlencode({
+      replicas = 2
+      resources = {
+        limits = {
+          cpu    = "300m"
+          memory = "312Mi"
+        }
+      }
+    })
+  ]
+}
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
