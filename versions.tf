@@ -1,4 +1,3 @@
-# TF version and required providers go here
 terraform {
   required_version = ">= 1.11.0"
 
