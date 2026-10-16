@@ -25,7 +25,7 @@ variable "agent_id" {
   type        = string
   nullable    = true
   default     = null
-  
+
   validation {
     condition     = var.agent_id == null ? true : length(var.agent_id) >= 2 && length(var.agent_id) <= 63
     error_message = "agent_id must be between 2 and 63 characters long"
