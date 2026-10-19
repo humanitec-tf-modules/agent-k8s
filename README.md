@@ -193,7 +193,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_agent_id"></a> [agent\_id](#output\_agent\_id) | id of the Agent |
+| <a name="output_agent_id"></a> [agent\_id](#output\_agent\_id) | ID of the Agent |
 | <a name="output_agent_private_key"></a> [agent\_private\_key](#output\_agent\_private\_key) | Private key of the Agent in PEM format. |
 | <a name="output_agent_public_key"></a> [agent\_public\_key](#output\_agent\_public\_key) | Public key of the Agent in PEM format. |
 | <a name="output_helm_release_chart"></a> [helm\_release\_chart](#output\_helm\_release\_chart) | Chart name used for the Agent Helm chart |
