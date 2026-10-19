@@ -138,9 +138,20 @@ run "accepts_other_values" {
 
   variables {
     helm_release_set           = [{ name = "a", value = "1" }]
-    helm_release_set_list      = [{ name = "b", value = ["2"] }]
-    helm_release_set_sensitive = [{ name = "c", value = "3" }]
-    helm_release_set_wo        = [{ name = "d", value = "4" }]
+    helm_release_set_list      = [{ name = "b", value = ["2", "3"] }]
+    helm_release_set_sensitive = [{ name = "c", value = "4" }]
+    helm_release_set_wo        = [{ name = "d", value = "5" }]
+  }
+}
+
+run "accepts_empty_lists" {
+  command = plan
+
+  variables {
+    helm_release_set           = []
+    helm_release_set_list      = []
+    helm_release_set_sensitive = []
+    helm_release_set_wo        = []
   }
 }
 

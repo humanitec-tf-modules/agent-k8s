@@ -227,9 +227,10 @@ variable "helm_release_set_wo" {
     type  = optional(string)
   }))
   ephemeral = true
-  default   = null
+  nullable  = false
+  default   = []
   validation {
-    condition     = alltrue([for s in coalesce(var.helm_release_set_wo, []) : !contains(local.module_managed_values, s.name)])
+    condition     = alltrue([for s in var.helm_release_set_wo : !contains(local.module_managed_values, s.name)])
     error_message = "The values ${join(", ", local.module_managed_values)} are set by the module and cannot be overridden."
   }
 }
@@ -244,9 +245,10 @@ variable "helm_release_set_list" {
     name  = string
     value = list(string)
   }))
-  default = null
+  nullable = false
+  default  = []
   validation {
-    condition     = alltrue([for s in coalesce(var.helm_release_set_list, []) : !contains(local.module_managed_values, s.name)])
+    condition     = alltrue([for s in var.helm_release_set_list : !contains(local.module_managed_values, s.name)])
     error_message = "The values ${join(", ", local.module_managed_values)} are set by the module and cannot be overridden."
   }
 }
@@ -258,9 +260,10 @@ variable "helm_release_set_sensitive" {
     type  = optional(string)
   }))
   sensitive = true
-  default   = null
+  nullable  = false
+  default   = []
   validation {
-    condition     = alltrue([for s in coalesce(var.helm_release_set_sensitive, []) : !contains(local.module_managed_values, s.name)])
+    condition     = alltrue([for s in var.helm_release_set_sensitive : !contains(local.module_managed_values, s.name)])
     error_message = "The values ${join(", ", local.module_managed_values)} are set by the module and cannot be overridden."
   }
 }
