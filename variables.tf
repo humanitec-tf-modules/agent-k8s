@@ -50,6 +50,7 @@ variable "helm_release_namespace" {
 variable "helm_release_create_namespace" {
   description = "Choose whether to create the Kubernetes namespace"
   type        = bool
+  nullable    = false
   default     = true
 }
 variable "helm_release_name" {
