@@ -65,9 +65,9 @@ variable "helm_release_version" {
   default     = null
 }
 variable "helm_release_repository" {
-  description = "Repository where to locate the requested chart. If is a URL the chart is installed without installing the repository."
+  description = "Repository where to locate the requested chart. If is a URL the chart is installed without installing the repository. Set it to `null` for a local chart."
   type        = string
-  nullable    = false
+  nullable    = true
   default     = "oci://ghcr.io/humanitec/charts"
 }
 variable "helm_release_chart" {

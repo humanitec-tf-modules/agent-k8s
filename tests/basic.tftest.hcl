@@ -162,7 +162,7 @@ run "installs_chart_from_custom_repository" {
   }
 }
 
-run "installs_chart_without_repository" {
+run "installs_local_chart" {
   command = plan
 
   variables {
@@ -171,7 +171,7 @@ run "installs_chart_without_repository" {
   }
 
   assert {
-    condition     = helm_release.humanitec_agent.repository == "oci://ghcr.io/humanitec/charts"
+    condition     = helm_release.humanitec_agent.repository == null
     error_message = "Repository must be unset when helm_release_repository is null"
   }
   assert {
