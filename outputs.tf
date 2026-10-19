@@ -1,5 +1,5 @@
 output "agent_id" {
-  description = "id of the Agent"
+  description = "ID of the Agent"
   value       = humanitec_agent.agent.id
 }
 output "agent_public_key" {
